@@ -1,0 +1,52 @@
+# ===========================
+# Java / Maven / Gradle
+# ===========================
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# Package files
+*.jar
+*.war
+*.ear
+
+# Maven / Gradle folders
+target/
+build/
+
+# Eclipse / IntelliJ / VS Code folders
+*.idea/
+*.vscode/
+*.classpath
+*.project
+*.settings/
+
+# ===========================
+# Spring Boot / Application
+# ===========================
+
+# Ignore application properties (contains secrets)
+src/main/resources/application.properties
+
+# ===========================
+# OS / System files
+# ===========================
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# ===========================
+# Others
+# ===========================
+
+*.iml
+*.tmp
+
+application.properties
