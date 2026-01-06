@@ -1,7 +1,29 @@
 package com.example.AutoHub.sales.entity;
 
-import jakarta.persistence.Entity;
+import com.example.AutoHub.sales.enumclass.PaymentType;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name="invoices")
 public class Invoice {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long invoiceId;
+
+    private String invoiceNumber;
+    private LocalDate invoiceDate;
+    private double invoiceAmount;
+    private PaymentType paymentType;
+
+    @OneToOne
+    @JoinColumn(name = "sales_order_id")
+    private SalesOrder salesOrder;
 }

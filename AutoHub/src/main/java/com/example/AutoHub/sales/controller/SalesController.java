@@ -1,7 +1,41 @@
 package com.example.AutoHub.sales.controller;
 
-import org.springframework.web.bind.annotation.RestController;
+import com.example.AutoHub.sales.dto.PaymentDto;
+import com.example.AutoHub.sales.dto.QuoteDto;
+import com.example.AutoHub.sales.entity.Invoice;
+import com.example.AutoHub.sales.entity.SalesOrder;
+import com.example.AutoHub.sales.service.SalesService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/sales")
 public class SalesController {
+    @Autowired
+    SalesService salesService;
+
+    @PostMapping("/quote")
+    public SalesOrder generateQuote(@RequestBody QuoteDto quoteDto){
+        return salesService.generateQuote(quoteDto);
+    }
+
+    @PostMapping("/order/{id}")
+    public SalesOrder createOrder(@PathVariable Long id){
+        return salesService.createSalesOrder(id);
+    }
+
+    @PostMapping("/invoice/{id}")
+    public Invoice generateInvoice(Long id){
+        return salesService.generateInvoice(id);
+    }
+
+    @PostMapping("/payment")
+    public String processPayment(@RequestBody PaymentDto paymentDto){
+        return salesService.processPayment(paymentDto);
+    }
+
+    @PostMapping("/getSales/{id}")
+    public SalesOrder getSales(@PathVariable Long id){
+        return salesService.getSales(id);
+    }
 }
