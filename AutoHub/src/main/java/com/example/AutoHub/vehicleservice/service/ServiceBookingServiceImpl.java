@@ -9,6 +9,7 @@ import com.example.AutoHub.vehicleservice.dto.ServiceRequestDto;
 import com.example.AutoHub.vehicleservice.dto.ServiceResponseDto;
 import com.example.AutoHub.vehicleservice.entity.ServiceRecord;
 import com.example.AutoHub.vehicleservice.enumclass.ServiceStatus;
+import com.example.AutoHub.vehicleservice.repository.ServiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
