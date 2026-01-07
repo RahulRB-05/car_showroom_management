@@ -9,7 +9,6 @@ import com.example.AutoHub.sales.dto.PaymentDto;
 import com.example.AutoHub.sales.dto.QuoteDto;
 import com.example.AutoHub.sales.entity.Invoice;
 import com.example.AutoHub.sales.entity.SalesOrder;
-import com.example.AutoHub.sales.enumclass.PaymentType;
 import com.example.AutoHub.sales.enumclass.SalesStatus;
 import com.example.AutoHub.sales.repository.SalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;

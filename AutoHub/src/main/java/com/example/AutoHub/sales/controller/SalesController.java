@@ -25,7 +25,7 @@ public class SalesController {
     }
 
     @PostMapping("/invoice/{id}")
-    public Invoice generateInvoice(Long id){
+    public Invoice generateInvoice(@PathVariable Long id){
         return salesService.generateInvoice(id);
     }
 

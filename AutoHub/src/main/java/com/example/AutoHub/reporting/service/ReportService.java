@@ -1,9 +1,9 @@
 package com.example.AutoHub.reporting.service;
 
-import com.example.AutoHub.reporting.dto.ReportResponseDto;
+import java.io.File;
 
 public interface ReportService {
-    ReportResponseDto generateSalesReport();
-    ReportResponseDto generateServiceReport();
-    ReportResponseDto generateInventoryReport();
+    File downloadSalesReport(String format);
+    File downloadServiceReport(String format);
+    File downloadInventoryReport(String format);
 }
