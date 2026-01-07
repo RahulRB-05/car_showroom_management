@@ -39,3 +39,4 @@ public class ServiceController {
         return serviceBookingService.updateServiceStatus(serviceId,ServiceStatus.COMPLETED);
     }
 }
+
