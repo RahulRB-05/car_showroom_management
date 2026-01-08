@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/service")
 public class ServiceController {
     @Autowired
-    ServiceBookingService serviceBookingService;
+    private ServiceBookingService serviceBookingService;
 
     @PostMapping("/bookService")
     public ServiceResponseDto bookService(@RequestBody ServiceRequestDto serviceRequestDto){

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/sales")
 public class SalesController {
     @Autowired
-    SalesService salesService;
+    private SalesService salesService;
 
     @PostMapping("/quote")
     public SalesOrder generateQuote(@RequestBody QuoteDto quoteDto){
