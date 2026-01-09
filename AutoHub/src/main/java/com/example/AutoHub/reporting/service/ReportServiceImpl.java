@@ -13,8 +13,8 @@ public class ReportServiceImpl implements ReportService{
     private CsvReportUtil csvReportUtil;
 
     @Override
-    public File downloadSalesReport() {
-        File file = csvReportUtil.generateSalesReport();
+    public File downloadSalesReport(String format) {
+        File file = csvReportUtil.generateSalesReport(format);
 
         if(file==null || !file.exists()){
             throw new NotFoundException("Sales report generation Failed");
@@ -23,8 +23,8 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public File downloadServiceReport() {
-        File file= csvReportUtil.generateServiceReport();
+    public File downloadServiceReport(String format) {
+        File file= csvReportUtil.generateServiceReport(format);
 
         if(file==null || !file.exists()){
             throw new NotFoundException("Service report generation failed");
@@ -33,8 +33,8 @@ public class ReportServiceImpl implements ReportService{
     }
 
     @Override
-    public File downloadInventoryReport() {
-        File file = csvReportUtil.generateInventoryReport();
+    public File downloadInventoryReport(String format) {
+        File file = csvReportUtil.generateInventoryReport(format);
         if(file==null || !file.exists()){
             throw new NotFoundException("Inventory report generation failed");
         }

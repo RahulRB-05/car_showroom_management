@@ -1,0 +1,12 @@
+inventory-report : 2026-01-09T23:13:38.717813800
+----------------------------------------
+1:-
+----------------------------------------
+Brand        : Toyota
+Model        : Corolla
+Year         : 2022
+VIN          : 1HGCM82633A123456
+FuelType     : PETROL
+VehicleType  : NEW
+Status       : AVAILABLE
+----------------------------------------
