@@ -6,13 +6,16 @@ import com.example.AutoHub.customer.entity.Customer;
 import com.example.AutoHub.customer.repository.CustomerRepository;
 import com.example.AutoHub.exception.DuplicateEntryException;
 import com.example.AutoHub.exception.NotFoundException;
+import com.example.AutoHub.sales.entity.SalesOrder;
+import com.example.AutoHub.sales.repository.SalesRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Collections;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -20,6 +23,9 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private SalesRepository salesRepository;
 
     @Override
     public String deleteCustomer(Long id) {
@@ -32,21 +38,17 @@ public class CustomerServiceImpl implements CustomerService{
 
     @Override
     public  List<CustomerResponseDTO> getAllCustomers() {
-        List<Customer> customers =customerRepository.findAll();
-        List<CustomerResponseDTO> responseList = new ArrayList<>();
-
-        for (Customer customer : customers){
-            responseList.add(mapToResponse(customer));
-        }
+        List<CustomerResponseDTO> responseList = customerRepository.findAll().stream().
+                map(this::mapToResponse).collect(Collectors.toList());
 
         return responseList;
-
     }
 
     @Override
     public CustomerResponseDTO updateCustomer(Long id, CustomerRequestDTO dto) {
         Customer  existingCustomer =customerRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Customer not found with id: "+ id));
+
         existingCustomer.setCustomerName(dto.getName());
         existingCustomer.setCustomerEmail(dto.getEmail());
         existingCustomer.setCustomerPhone(dto.getPhone());
@@ -69,17 +71,17 @@ public class CustomerServiceImpl implements CustomerService{
                 .ifPresent(c -> {
                     throw new DuplicateEntryException("Customer already exists");
                 });
+
         Customer customer = new Customer();
-        customer.setCustomerId(dto.getCustomerId());
         customer.setCustomerName(dto.getName());
         customer.setCustomerEmail(dto.getEmail());
         customer.setCustomerPhone(dto.getPhone());
         customer.setCustomerAddress(dto.getAddress());
+        customer.setSales(new ArrayList<>());
 
         Customer savedCustomer =customerRepository.save(customer);
 
         return mapToResponse(customer);
-
     }
     public CustomerResponseDTO mapToResponse(Customer customer){
         CustomerResponseDTO response =new CustomerResponseDTO();

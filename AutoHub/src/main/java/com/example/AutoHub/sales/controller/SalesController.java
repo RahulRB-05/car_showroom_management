@@ -24,6 +24,11 @@ public class SalesController {
         return salesService.createSalesOrder(id);
     }
 
+    @PutMapping("/cancelOrder/{id}")
+    public SalesOrder cancelOrder(@PathVariable Long id){
+        return salesService.cancelSalesOrder(id);
+    }
+
     @PostMapping("/invoice/{id}")
     public Invoice generateInvoice(@PathVariable Long id){
         return salesService.generateInvoice(id);

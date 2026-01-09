@@ -7,10 +7,13 @@ import com.example.AutoHub.inventory.enumclass.Transmission;
 import com.example.AutoHub.inventory.enumclass.VehicleStatus;
 import com.example.AutoHub.inventory.enumclass.VehicleType;
 import com.example.AutoHub.inventory.repository.VehicleRepository;
+import com.example.AutoHub.sales.entity.SalesOrder;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -37,6 +40,8 @@ public class VehicleServiceImpl implements VehicleService{
         vehicle.setPrice(vehicleRequestDto.getPrice());
         vehicle.setPurchaseDate(vehicleRequestDto.getPurchaseDate());
         vehicle.setCreatedDate(LocalDate.now());
+        vehicle.setSales(new ArrayList<>());
+
         vehicleRepository.save(vehicle);
         return "Vehicle Added Successfully...";
     }

@@ -13,10 +13,6 @@ import lombok.Data;
 @Data
 public class CustomerRequestDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long customerId;
-
     @NotBlank(message = "Customer name is required")
     @Column(nullable = false,unique = true)
     private String name;

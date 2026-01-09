@@ -14,6 +14,8 @@ import com.example.AutoHub.sales.repository.SalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+
 @Service
 public class SalesServiceImpl implements SalesService{
 
@@ -31,11 +33,13 @@ public class SalesServiceImpl implements SalesService{
 
         Vehicle vehicle=vehicleRepository.findById(quoteDto.getVehicleId()).orElseThrow(()->new NotFoundException("Vehicle not Found"));
         Customer customer=customerRepository.findById(quoteDto.getCustomerId()).orElseThrow(()->new NotFoundException("Customer not Found"));
+
         SalesOrder order=new SalesOrder();
         order.setCustomer(customer);
         order.setVehicle(vehicle);
-        order.setTotalAmount(quoteDto.getQuotedPrice());
+        order.setTotalAmount(vehicle.getPrice());
         order.setStatus(SalesStatus.QUOTED);
+        order.setSalesDate(LocalDate.now());
 
         return salesRepo.save(order);
     }
@@ -51,11 +55,11 @@ public class SalesServiceImpl implements SalesService{
     @Override
     public Invoice generateInvoice(Long salesOrderId) {
         SalesOrder order=salesRepo.findById(salesOrderId).orElseThrow(()->new NotFoundException("Sales order not found"));
+
         Invoice invoice=new Invoice();
         invoice.setInvoiceNumber("IN-"+System.currentTimeMillis());
         invoice.setInvoiceAmount(order.getTotalAmount());
         invoice.setSalesOrder(order);
-
         order.setInvoice(invoice);
 
         salesRepo.save(order);
@@ -67,8 +71,16 @@ public class SalesServiceImpl implements SalesService{
         SalesOrder order=salesRepo.findById(paymentDto.getSalesOrderId()).orElseThrow(()->new NotFoundException("Sales order not found"));
         order.setStatus(SalesStatus.PAID);
         salesRepo.save(order);
-
         return "Payment Successful via - "+paymentDto.getPaymentMethod().toString();
+    }
+
+    @Override
+    public SalesOrder cancelSalesOrder(Long salesOrderId){
+        SalesOrder order=salesRepo.findById(salesOrderId).orElseThrow(()->new NotFoundException("Sales Order Not Found..."));
+        if(order.getStatus().toString().equalsIgnoreCase("CANCELLED") ){
+            order.setStatus(SalesStatus.CANCELLED);
+        }
+        return salesRepo.save(order);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.example.AutoHub.inventory.entity;
 
 import com.example.AutoHub.inventory.enumclass.*;
+import com.example.AutoHub.sales.entity.SalesOrder;
 import org.hibernate.annotations.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
@@ -20,7 +22,7 @@ public class Vehicle {
     //    PRIMARY KEY
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long vechileId;
+    private Long vehicleId;
 
     //    BASIC DETAILS
     private String brand;
@@ -56,5 +58,8 @@ public class Vehicle {
     //    DATES
     private LocalDate purchaseDate;
     private LocalDate createdDate;
+
+    @OneToMany(mappedBy = "vehicle")
+    List<SalesOrder> sales;
 
 }

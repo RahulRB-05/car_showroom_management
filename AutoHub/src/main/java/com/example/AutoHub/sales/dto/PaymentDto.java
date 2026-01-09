@@ -10,11 +10,5 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class PaymentDto {
     private Long salesOrderId;
-    private double amount;
     private PaymentType paymentMethod;
-    private LocalDate orderDate;
-
-    public PaymentDto(){
-        this.orderDate=LocalDate.now();
-    }
 }

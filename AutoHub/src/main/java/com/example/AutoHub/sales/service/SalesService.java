@@ -10,5 +10,6 @@ public interface SalesService {
     SalesOrder createSalesOrder(Long salesOrderId);
     Invoice generateInvoice(Long salesOrderId);
     String processPayment(PaymentDto paymentDto);
+    SalesOrder cancelSalesOrder(Long salesOrderId);
     SalesOrder getSales(Long salesOrderId);
 }

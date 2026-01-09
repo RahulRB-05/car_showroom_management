@@ -18,7 +18,6 @@ public class  CustomerController {
     @Autowired
     private CustomerService customerService;
 
-
     //create
     @PostMapping("/create")
     public CustomerResponseDTO createCustomer(@Valid @RequestBody CustomerRequestDTO customerRequestDTO){
