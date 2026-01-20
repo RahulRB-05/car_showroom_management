@@ -19,9 +19,19 @@ public class SalesController {
         return salesService.generateQuote(quoteDto);
     }
 
-    @PostMapping("/order/{id}")
+    @PutMapping("/order/{id}")
     public SalesOrder createOrder(@PathVariable Long id){
         return salesService.createSalesOrder(id);
+    }
+
+    @PutMapping("/cancelOrder/{id}")
+    public SalesOrder cancelOrder(@PathVariable Long id){
+        return salesService.cancelSalesOrder(id);
+    }
+
+    @PutMapping("/payment")
+    public String processPayment(@RequestBody PaymentDto paymentDto){
+        return salesService.processPayment(paymentDto);
     }
 
     @PostMapping("/invoice/{id}")
@@ -29,12 +39,10 @@ public class SalesController {
         return salesService.generateInvoice(id);
     }
 
-    @PostMapping("/payment")
-    public String processPayment(@RequestBody PaymentDto paymentDto){
-        return salesService.processPayment(paymentDto);
-    }
+    @GetMapping("/getInvoice/{id}")
+    public Invoice getInvoice(@PathVariable Long id){return salesService.getInvoiceById(id);}
 
-    @PostMapping("/getSales/{id}")
+    @GetMapping("/getSales/{id}")
     public SalesOrder getSales(@PathVariable Long id){
         return salesService.getSales(id);
     }

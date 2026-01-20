@@ -4,9 +4,7 @@ import com.example.AutoHub.reporting.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
 
@@ -15,22 +13,22 @@ import java.io.File;
 public class ReportController {
 
     @Autowired
-    ReportService reportService;
+    private ReportService reportService;
 
-    @GetMapping(value = "/sales",produces = "application/octet-stream")
-    public Resource salesReport(String format){
+    @GetMapping(value = "/sales/{format}",produces = "application/octet-stream")
+    public Resource salesReport(@PathVariable String format){
         File file =reportService.downloadSalesReport(format);
         return new FileSystemResource(file);
     }
 
-    @GetMapping(value = "/service",produces = "application/octet-stream")
-    public Resource serviceReport(String format){
+    @GetMapping(value = "/service/{format}",produces = "application/octet-stream")
+    public Resource serviceReport(@PathVariable String format){
         File file=reportService.downloadServiceReport(format);
         return new FileSystemResource(file);
     }
 
-    @GetMapping(value = "/inventory",produces = "application/octet-stream")
-    public Resource inventoryReport(String format){
+    @GetMapping(value = "/inventory/{format}",produces = "application/octet-stream")
+    public Resource inventoryReport(@PathVariable String format){
         File file=reportService.downloadInventoryReport(format);
         return new FileSystemResource(file);
     }

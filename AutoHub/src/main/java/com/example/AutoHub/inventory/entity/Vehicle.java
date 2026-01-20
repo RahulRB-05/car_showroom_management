@@ -20,7 +20,7 @@ public class Vehicle {
     //    PRIMARY KEY
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long vechileId;
+    private Long vehicleId;
 
     //    BASIC DETAILS
     private String brand;
