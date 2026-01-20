@@ -2,17 +2,22 @@ package com.example.AutoHub.sales.service;
 
 import com.example.AutoHub.customer.entity.Customer;
 import com.example.AutoHub.customer.repository.CustomerRepository;
+import com.example.AutoHub.exception.ConcurrencyException;
+import com.example.AutoHub.exception.InvalidInputException;
 import com.example.AutoHub.exception.NotFoundException;
 import com.example.AutoHub.inventory.entity.Vehicle;
+import com.example.AutoHub.inventory.enumclass.VehicleStatus;
 import com.example.AutoHub.inventory.repository.VehicleRepository;
 import com.example.AutoHub.sales.dto.PaymentDto;
 import com.example.AutoHub.sales.dto.QuoteDto;
 import com.example.AutoHub.sales.entity.Invoice;
 import com.example.AutoHub.sales.entity.SalesOrder;
 import com.example.AutoHub.sales.enumclass.SalesStatus;
+import com.example.AutoHub.sales.repository.InvoiceRepository;
 import com.example.AutoHub.sales.repository.SalesRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 
@@ -20,7 +25,10 @@ import java.time.LocalDate;
 public class SalesServiceImpl implements SalesService{
 
     @Autowired
-    private SalesRepository salesRepo;
+    private InvoiceRepository invoiceRepository;
+
+    @Autowired
+    private SalesRepository salesRepository;
 
     @Autowired
     private VehicleRepository vehicleRepository;
@@ -41,50 +49,99 @@ public class SalesServiceImpl implements SalesService{
         order.setStatus(SalesStatus.QUOTED);
         order.setSalesDate(LocalDate.now());
 
-        return salesRepo.save(order);
+        return salesRepository.save(order);
     }
 
     @Override
     public SalesOrder createSalesOrder(Long salesOrderId) {
-        SalesOrder order=salesRepo.findById(salesOrderId).orElseThrow(()->new NotFoundException("Sales order not found"));
+        SalesOrder order= salesRepository.findById(salesOrderId).orElseThrow(()->new NotFoundException("Sales order not found"));
+        Vehicle vehicle=vehicleRepository.findById(order.getVehicle().getVehicleId()).orElseThrow(()-> new NotFoundException("Vehicle not found"));
+
+        if(order.getStatus().toString().equalsIgnoreCase("CANCELLED")){
+            throw new InvalidInputException("Already cancelled create a new quote...");
+        }
+
+        vehicle.setVehicleStatus(VehicleStatus.RESERVED);
         order.setStatus(SalesStatus.ORDERED);
 
-        return salesRepo.save(order);
-    }
-
-    @Override
-    public Invoice generateInvoice(Long salesOrderId) {
-        SalesOrder order=salesRepo.findById(salesOrderId).orElseThrow(()->new NotFoundException("Sales order not found"));
-
-        Invoice invoice=new Invoice();
-        invoice.setInvoiceNumber("IN-"+System.currentTimeMillis());
-        invoice.setInvoiceAmount(order.getTotalAmount());
-        invoice.setSalesOrder(order);
-        order.setInvoice(invoice);
-
-        salesRepo.save(order);
-        return invoice ;
-    }
-
-    @Override
-    public String processPayment(PaymentDto paymentDto) {
-        SalesOrder order=salesRepo.findById(paymentDto.getSalesOrderId()).orElseThrow(()->new NotFoundException("Sales order not found"));
-        order.setStatus(SalesStatus.PAID);
-        salesRepo.save(order);
-        return "Payment Successful via - "+paymentDto.getPaymentMethod().toString();
+        vehicleRepository.save(vehicle);
+        return salesRepository.save(order);
     }
 
     @Override
     public SalesOrder cancelSalesOrder(Long salesOrderId){
-        SalesOrder order=salesRepo.findById(salesOrderId).orElseThrow(()->new NotFoundException("Sales Order Not Found..."));
-        if(order.getStatus().toString().equalsIgnoreCase("CANCELLED") ){
-            order.setStatus(SalesStatus.CANCELLED);
+        SalesOrder order= salesRepository.findById(salesOrderId).orElseThrow(()->new NotFoundException("Sales Order Not Found..."));
+        Vehicle vehicle=vehicleRepository.findById(order.getVehicle().getVehicleId()).orElseThrow(()->new NotFoundException(("Vehicle not found...")));
+
+        if(order.getStatus().toString().equalsIgnoreCase("CANCELLED")){
+            throw new InvalidInputException("Already cancelled create a new quote...");
         }
-        return salesRepo.save(order);
+
+            vehicle.setVehicleStatus(VehicleStatus.AVAILABLE);
+            order.setStatus(SalesStatus.CANCELLED);
+
+        vehicleRepository.save(vehicle);
+        return salesRepository.save(order);
+    }
+
+    @Override
+    public String processPayment(PaymentDto paymentDto) {
+        SalesOrder order= salesRepository.findById(paymentDto.getSalesOrderId()).orElseThrow(()->new NotFoundException("Sales order not found"));
+        Vehicle vehicle=vehicleRepository.findById(order.getVehicle().getVehicleId()).orElseThrow(()->new NotFoundException("Vehicle not found..."));
+
+        if(order.getStatus().toString().equalsIgnoreCase("CANCELLED")){
+            throw new InvalidInputException("Already cancelled create a new quote...");
+        }
+
+        if(order.getStatus()==SalesStatus.PAID){
+            throw new ConcurrencyException("Already Paid...");
+        }
+
+        order.setStatus(SalesStatus.PAID);
+        order.setType(paymentDto.getPaymentMethod());
+
+        vehicle.setVehicleStatus(VehicleStatus.SOLD);
+
+        vehicleRepository.save(vehicle);
+        salesRepository.save(order);
+
+        return "Payment Successful via - "+paymentDto.getPaymentMethod().toString();
+    }
+
+    @Override
+    @Transactional
+    public Invoice generateInvoice(Long salesOrderId) {
+        SalesOrder order= salesRepository.findById(salesOrderId).orElseThrow(()->new NotFoundException("Sales order not found"));
+
+        if(order.getStatus().toString().equalsIgnoreCase("CANCELLED")){
+            throw new ConcurrencyException("Already cancelled cannot create invoice...");
+        }
+        if(order.getInvoice()!=null){
+            throw new ConcurrencyException("Invoice already created...");
+        }
+
+        Invoice invoice=new Invoice();
+        invoice.setInvoiceNumber("IN-"+System.currentTimeMillis());
+        invoice.setInvoiceAmount(order.getTotalAmount());
+        invoice.setInvoiceDate(LocalDate.now());
+        invoice.setPaymentType(order.getType());
+        invoice.setCustomer(order.getCustomer());
+
+        invoice.setSalesOrder(order);
+
+        order.setInvoice(invoice);
+        salesRepository.save(order);
+        return invoice ;
+    }
+
+    @Override
+    public Invoice getInvoiceById(Long customerId) {
+        Invoice invoice=invoiceRepository.findById(customerId).orElseThrow(()->new NotFoundException("Invoice not found"));
+        return invoice;
     }
 
     @Override
     public SalesOrder getSales(Long salesOrderId) {
-        return salesRepo.findById(salesOrderId).orElseThrow(()->new NotFoundException("Sales order not found"));
+        return salesRepository.findById(salesOrderId).orElseThrow(()->new NotFoundException("Sales order not found"));
     }
 }

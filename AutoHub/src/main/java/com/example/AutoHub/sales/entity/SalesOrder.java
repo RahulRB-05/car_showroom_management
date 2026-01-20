@@ -2,6 +2,7 @@ package com.example.AutoHub.sales.entity;
 
 import com.example.AutoHub.customer.entity.Customer;
 import com.example.AutoHub.inventory.entity.Vehicle;
+import com.example.AutoHub.sales.enumclass.PaymentType;
 import com.example.AutoHub.sales.enumclass.SalesStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -26,7 +27,11 @@ public class SalesOrder {
     @Enumerated(EnumType.STRING)
     private SalesStatus status;
 
-    @OneToOne(mappedBy = "salesOrder")
+    @Enumerated(EnumType.STRING)
+    private PaymentType type;
+
+    @OneToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
+    @JoinColumn(name = "invoice_id")
     private Invoice invoice;
 
     @ManyToOne
@@ -36,4 +41,5 @@ public class SalesOrder {
     @ManyToOne
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
+
 }

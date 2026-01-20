@@ -1,0 +1,12 @@
+sales-report
+
+----------------------------------------
+1:-
+----------------------------------------
+SalesOrderId        : 1
+Sale Price          : 2450000.0
+Customer Name       : Arun Kumar
+Vehicle             : Innova Crysta
+VIN                 : JTDBR32E720123456
+Sale Status         : PAID
+----------------------------------------

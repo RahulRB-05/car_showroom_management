@@ -1,5 +1,6 @@
 package com.example.AutoHub.customer.entity;
 
+import com.example.AutoHub.sales.entity.Invoice;
 import com.example.AutoHub.sales.entity.SalesOrder;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,5 +30,8 @@ public class Customer {
     private String customerAddress;
 
     @OneToMany(mappedBy = "customer")
-    List<SalesOrder> sales;
+    List<SalesOrder> sales=new ArrayList<>();
+
+    @OneToMany(mappedBy = "customer")
+    List<Invoice> invoice=new ArrayList<>();
 }

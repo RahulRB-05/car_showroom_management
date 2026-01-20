@@ -1,5 +1,6 @@
 package com.example.AutoHub.sales.entity;
 
+import com.example.AutoHub.customer.entity.Customer;
 import com.example.AutoHub.sales.enumclass.PaymentType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,9 +22,14 @@ public class Invoice {
     private String invoiceNumber;
     private LocalDate invoiceDate;
     private double invoiceAmount;
+
+    @Enumerated(EnumType.STRING)
     private PaymentType paymentType;
 
-    @OneToOne
-    @JoinColumn(name = "sales_order_id")
+    @OneToOne(mappedBy = "invoice")
     private SalesOrder salesOrder;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 }

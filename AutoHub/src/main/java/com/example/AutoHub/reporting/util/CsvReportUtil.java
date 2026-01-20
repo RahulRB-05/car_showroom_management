@@ -64,30 +64,30 @@ public class CsvReportUtil {
         }
 
         else if (format.equalsIgnoreCase("csv")) {
-            try {
                 createDir();
                 File file = new File(ReportConstants.REPORT_PATH + ReportConstants.SALES_REPORT + ".csv");
-                PrintWriter writer=new PrintWriter(file);
 
-                writer.println(ReportConstants.SALES_REPORT+" - "+LocalDateTime.now());
-                writer.println("SlNo,SalesOrderId,Sale Price,Customer Name,Vehicle,VIN,Sale Status");
+                try(PrintWriter writer=new PrintWriter(file)) {
 
-                List<SalesOrder> sales=salesRepository.findAll();
-                int count = 1;
-                for(SalesOrder order:sales){
-                    writer.println(
-                                    count+":-,"+
-                                    order.getSalesOrderId()+","+
-                                    order.getTotalAmount()+","+
-                                    order.getCustomer().getCustomerName()+","+
-                                    order.getVehicle().getModel()+","+
-                                    order.getVehicle().getVin()+","+
-                                    order.getStatus()
-                    );
-                    count++;
-                }
-                writer.close();
-                return file;
+                    writer.println(ReportConstants.SALES_REPORT + " - " + LocalDateTime.now());
+                    writer.println("SlNo,SalesOrderId,Sale Price,Customer Name,Vehicle,VIN,Sale Status");
+
+                    List<SalesOrder> sales = salesRepository.findAll();
+                    int count = 1;
+                    for (SalesOrder order : sales) {
+                        writer.println(
+                                count + "," +
+                                        order.getSalesOrderId() + "," +
+                                        order.getTotalAmount() + "," +
+                                        order.getCustomer().getCustomerName() + "," +
+                                        order.getVehicle().getModel() + "," +
+                                        order.getVehicle().getVin() + "," +
+                                        order.getStatus()
+                        );
+                        count++;
+                    }
+                    writer.close();
+                    return file;
             }catch (Exception e){
                 throw new ReportGenerationFailedException("Sales report csv generation failed...");
             }
@@ -159,10 +159,10 @@ public class CsvReportUtil {
         }
 
         else if (format.equalsIgnoreCase("csv")) {
-            try{
                 createDir();
                 File file=new File(ReportConstants.REPORT_PATH+ReportConstants.SERVICE_REPORT+".csv");
-                PrintWriter writer=new PrintWriter(file);
+
+               try(PrintWriter writer=new PrintWriter(file)){
 
                 writer.println(ReportConstants.SERVICE_REPORT+" - "+LocalDateTime.now());
                 writer.println("SlNo,VIN,Vehicle,Customer,CustomerId,Date,ServiceStatus,Charges");
@@ -171,7 +171,7 @@ public class CsvReportUtil {
                 int count=1;
                 for(ServiceRecord service:services){
                     writer.println(
-                                    count+":-,"+
+                                    count+","+
                                     service.getVehicle().getVin()+","+
                                     service.getVehicle().getModel()+","+
                                     service.getCustomer().getCustomerName()+","+
@@ -256,10 +256,10 @@ public class CsvReportUtil {
             }
         }
         else if(format.equalsIgnoreCase("csv")){
-            try{
                 createDir();
                 File file=new File(ReportConstants.REPORT_PATH+ReportConstants.INVENTORY_REPORT+".csv");
-                PrintWriter writer=new PrintWriter(file);
+
+                try(PrintWriter writer=new PrintWriter(file)){
 
                 writer.println(ReportConstants.INVENTORY_REPORT+" - "+LocalDateTime.now());
                 writer.println("SlNo,Brand,Model,Year,VIN,FuelType,VehicleType,Status");
@@ -269,7 +269,7 @@ public class CsvReportUtil {
 
                 for(Vehicle vehicle:vehicles){
                     writer.println(
-                            count+":-,"+
+                            count+","+
                                     vehicle.getBrand()+","+
                                     vehicle.getModel()+","+
                                     vehicle.getManufacturingYear()+","+
@@ -284,6 +284,7 @@ public class CsvReportUtil {
                 return file;
             }
             catch(Exception e){
+                e.printStackTrace();
                 throw new ReportGenerationFailedException("Inventory report csv generation failed");
             }
         }
