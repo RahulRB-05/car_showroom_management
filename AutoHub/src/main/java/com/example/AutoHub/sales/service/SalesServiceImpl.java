@@ -8,6 +8,9 @@ import com.example.AutoHub.exception.NotFoundException;
 import com.example.AutoHub.inventory.entity.Vehicle;
 import com.example.AutoHub.inventory.enumclass.VehicleStatus;
 import com.example.AutoHub.inventory.repository.VehicleRepository;
+import com.example.AutoHub.notification.entity.VehicleInventory;
+import com.example.AutoHub.notification.repository.InventoryRepository;
+import com.example.AutoHub.notification.service.InventoryService;
 import com.example.AutoHub.sales.dto.PaymentDto;
 import com.example.AutoHub.sales.dto.QuoteDto;
 import com.example.AutoHub.sales.entity.Invoice;
@@ -35,6 +38,9 @@ public class SalesServiceImpl implements SalesService{
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private InventoryService inventoryService;
 
     @Override
     public SalesOrder generateQuote(QuoteDto quoteDto) {
@@ -101,6 +107,8 @@ public class SalesServiceImpl implements SalesService{
         order.setType(paymentDto.getPaymentMethod());
 
         vehicle.setVehicleStatus(VehicleStatus.SOLD);
+
+        inventoryService.reduceStock(vehicle.getBrand(), vehicle.getModel());
 
         vehicleRepository.save(vehicle);
         salesRepository.save(order);

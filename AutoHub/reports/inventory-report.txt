@@ -1,0 +1,67 @@
+inventory-report : 2026-01-20T16:16:31.927369500
+----------------------------------------
+1:-
+----------------------------------------
+Brand        : Toyota
+Model        : Innova Crysta
+Year         : 2023
+VIN          : JTDBR32E720123456
+FuelType     : DIESEL
+VehicleType  : NEW
+Status       : AVAILABLE
+----------------------------------------
+----------------------------------------
+2:-
+----------------------------------------
+Brand        : Toyota
+Model        : Camry
+Year         : 2025
+VIN          : JTDBR32E745123456
+FuelType     : PETROL
+VehicleType  : NEW
+Status       : AVAILABLE
+----------------------------------------
+----------------------------------------
+3:-
+----------------------------------------
+Brand        : Toyota
+Model        : Innova Crysta
+Year         : 2023
+VIN          : JTDBR32E724523456
+FuelType     : DIESEL
+VehicleType  : NEW
+Status       : AVAILABLE
+----------------------------------------
+----------------------------------------
+4:-
+----------------------------------------
+Brand        : Toyota
+Model        : Innova Crysta
+Year         : 2023
+VIN          : JTDBR32E726752456
+FuelType     : DIESEL
+VehicleType  : NEW
+Status       : AVAILABLE
+----------------------------------------
+----------------------------------------
+5:-
+----------------------------------------
+Brand        : Toyota
+Model        : Innova Crysta
+Year         : 2023
+VIN          : JTDBR32E722342456
+FuelType     : DIESEL
+VehicleType  : NEW
+Status       : AVAILABLE
+----------------------------------------
+----------------------------------------
+6:-
+----------------------------------------
+Brand        : Toyota
+Model        : Innova Crysta
+Year         : 2023
+VIN          : JTDBR32E725442456
+FuelType     : DIESEL
+VehicleType  : NEW
+Status       : AVAILABLE
+----------------------------------------

@@ -7,7 +7,9 @@ import com.example.AutoHub.inventory.enumclass.Transmission;
 import com.example.AutoHub.inventory.enumclass.VehicleStatus;
 import com.example.AutoHub.inventory.enumclass.VehicleType;
 import com.example.AutoHub.inventory.repository.VehicleRepository;
+import com.example.AutoHub.notification.service.InventoryService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -17,7 +19,10 @@ import java.util.List;
 @AllArgsConstructor
 public class VehicleServiceImpl implements VehicleService{
 
-    private final VehicleRepository vehicleRepository;
+    @Autowired
+    private VehicleRepository vehicleRepository;
+    @Autowired
+    private InventoryService inventoryService;
 
     @Override
     public String addvehicle(VehicleRequestDto vehicleRequestDto) {
@@ -38,6 +43,9 @@ public class VehicleServiceImpl implements VehicleService{
         vehicle.setPurchaseDate(vehicleRequestDto.getPurchaseDate());
         vehicle.setCreatedDate(LocalDate.now());
         vehicleRepository.save(vehicle);
+
+        inventoryService.increaseStock(vehicleRequestDto.getBrand(),vehicleRequestDto.getModel());
+
         return "Vehicle Added Successfully...";
     }
 
