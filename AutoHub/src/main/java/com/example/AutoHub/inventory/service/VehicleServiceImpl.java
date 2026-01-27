@@ -9,6 +9,7 @@ import com.example.AutoHub.inventory.enumclass.Transmission;
 import com.example.AutoHub.inventory.enumclass.VehicleStatus;
 import com.example.AutoHub.inventory.enumclass.VehicleType;
 import com.example.AutoHub.inventory.repository.VehicleRepository;
+import com.example.AutoHub.notification.service.InventoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -23,6 +24,7 @@ import java.util.List;
 public class VehicleServiceImpl implements VehicleService{
 
     private final VehicleRepository vehicleRepository;
+    private final InventoryService inventoryService;
 
     @Override
     public VehicleResponseDto addvehicle(VehicleRequestDto vehicleRequestDto) {
